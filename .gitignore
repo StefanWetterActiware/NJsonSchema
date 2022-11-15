@@ -25,3 +25,6 @@ src/packages/Newtonsoft.Json**
 _ReSharper.Caches
 /.nuke/temp
 /artifacts
+
+# Ignore files from JetBrainds Rider
+/src/.idea/

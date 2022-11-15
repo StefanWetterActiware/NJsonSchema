@@ -49,8 +49,7 @@ namespace NJsonSchema.CodeGeneration
         /// <returns>The type name.</returns>
         public virtual string GetOrGenerateTypeName(JsonSchema schema, string typeNameHint)
         {
-            schema = RemoveNullability(schema).ActualSchema;
-
+            schema = schema.ActualSchema;
             RegisterSchemaDefinitions(schema.Definitions);
 
             if (!_generatedTypeNames.TryGetValue(schema, out var typeNames))
@@ -81,22 +80,12 @@ namespace NJsonSchema.CodeGeneration
             }
         }
 
-        /// <summary>Removes a nullable oneOf reference if available.</summary>
-        /// <param name="schema">The schema.</param>
-        /// <returns>The actually resolvable schema</returns>
-        public virtual JsonSchema RemoveNullability(JsonSchema schema)
-        {
-            // TODO: Method on JsonSchema4?
-            return schema.OneOf.FirstOrDefault(o => !o.IsNullable(SchemaType.JsonSchema)) ?? schema;
-        }
-
         /// <summary>Gets the actual schema (i.e. when not referencing a type schema or it is inlined)
         /// and removes a nullable oneOf reference if available.</summary>
         /// <param name="schema">The schema.</param>
         /// <returns>The actually resolvable schema</returns>
         public JsonSchema GetResolvableSchema(JsonSchema schema)
         {
-            schema = RemoveNullability(schema);
             return IsDefinitionTypeSchema(schema.ActualSchema) ? schema : schema.ActualSchema;
         }
 
